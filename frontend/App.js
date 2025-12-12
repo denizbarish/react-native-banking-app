@@ -1,20 +1,24 @@
+import React, { useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { PaperProvider } from 'react-native-paper';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { theme } from './src/theme/theme';
+import LoginScreen from './src/screens/LoginScreen';
+import ApplicationFlow from './src/screens/ApplicationFlow';
 
 export default function App() {
+  const [showApplication, setShowApplication] = useState(false);
+
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <SafeAreaProvider>
+      <PaperProvider theme={theme}>
+        <StatusBar style="auto" />
+        {showApplication ? (
+          <ApplicationFlow onComplete={() => setShowApplication(false)} />
+        ) : (
+          <LoginScreen onStartApplication={() => setShowApplication(true)} />
+        )}
+      </PaperProvider>
+    </SafeAreaProvider>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});

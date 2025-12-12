@@ -16,14 +16,14 @@ app.get('/', (req, res) => {
 });
 
 // Import routes here
-// const authRoutes = require('./routes/auth.routes');
-// const accountRoutes = require('./routes/account.routes');
-// const transactionRoutes = require('./routes/transaction.routes');
+const authRoutes = require('./routes/auth.routes');
+const accountRoutes = require('./routes/account.routes');
+const transactionRoutes = require('./routes/transaction.routes');
 
 // Use routes
-// app.use('/api/auth', authRoutes);
-// app.use('/api/accounts', accountRoutes);
-// app.use('/api/transactions', transactionRoutes);
+app.use('/api/auth', authRoutes);
+app.use('/api/accounts', accountRoutes);
+app.use('/api/transactions', transactionRoutes);
 
 // Error handling middleware
 app.use((err, req, res, next) => {
