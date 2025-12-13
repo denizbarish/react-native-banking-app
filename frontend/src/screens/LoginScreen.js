@@ -19,7 +19,7 @@ import {
 import { colors } from '../theme/colors';
 import { authService } from '../services/authService';
 
-export default function LoginScreen({ onStartApplication }) {
+export default function LoginScreen({ onStartApplication, onLoginSuccess }) {
   const [tcNo, setTcNo] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -48,6 +48,15 @@ export default function LoginScreen({ onStartApplication }) {
     try {
       const response = await authService.login(tcNo, password);
       console.log('Login successful:', response);
+      // Token'ı kaydet (gelecekte AsyncStorage kullanılabilir)
+      if (response.token) {
+        // await AsyncStorage.setItem('token', response.token);
+      }
+      // Başarılı giriş - Ana ekrana yönlendir
+      setError('');
+      if (onLoginSuccess) {
+        onLoginSuccess(response.user);
+      }
     } catch (err) {
       setError(err.message || 'Giriş başarısız. Lütfen bilgilerinizi kontrol edin.');
     } finally {

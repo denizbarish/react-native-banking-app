@@ -5,6 +5,7 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
   Modal,
+  Alert,
 } from 'react-native';
 import { Svg, Circle } from 'react-native-svg';
 import {
@@ -12,8 +13,10 @@ import {
   Button,
   Text,
   Surface,
+  ActivityIndicator,
 } from 'react-native-paper';
 import { colors } from '../theme/colors';
+import { authService } from '../services/authService';
 import StepIndicator from '../components/StepIndicator';
 
 export default function Step2SmsVerification({ onNext, phoneNumber, onTimeout, currentStep, maxStepReached, onStepPress }) {
@@ -21,6 +24,19 @@ export default function Step2SmsVerification({ onNext, phoneNumber, onTimeout, c
   const [error, setError] = useState('');
   const [timeLeft, setTimeLeft] = useState(180);
   const [showTimeoutModal, setShowTimeoutModal] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    // SMS gönder
+    const sendSMS = async () => {
+      try {
+        await authService.sendSMS(phoneNumber);
+      } catch (err) {
+        console.error('SMS gönderme hatası:', err);
+      }
+    };
+    sendSMS();
+  }, []);
 
   useEffect(() => {
     if (timeLeft === 0) {
@@ -53,7 +69,7 @@ export default function Step2SmsVerification({ onNext, phoneNumber, onTimeout, c
   const circumference = 2 * Math.PI * radius;
   const strokeDashoffset = circumference * (1 - progress);
 
-  const handleVerify = () => {
+  const handleVerify = async () => {
     if (!code) {
       setError('Lütfen SMS kodunu girin');
       return;
@@ -70,13 +86,32 @@ export default function Step2SmsVerification({ onNext, phoneNumber, onTimeout, c
     }
 
     setError('');
-    onNext({ smsCode: code });
+    setLoading(true);
+
+    try {
+      // Backend'e SMS doğrulama isteği gönder
+      await authService.verifySMS(phoneNumber, code);
+      onNext({ smsCode: code, smsVerified: true });
+    } catch (err) {
+      setError(err.message || 'SMS doğrulama başarısız. Lütfen kodu kontrol edin.');
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const handleResend = () => {
-    setTimeLeft(180);
-    setCode('');
-    setError('');
+  const handleResend = async () => {
+    try {
+      setLoading(true);
+      await authService.sendSMS(phoneNumber);
+      setTimeLeft(180);
+      setCode('');
+      setError('');
+      Alert.alert('Başarılı', 'SMS kodu yeniden gönderildi.');
+    } catch (err) {
+      Alert.alert('Hata', err.message || 'SMS gönderilemedi.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -149,9 +184,10 @@ export default function Step2SmsVerification({ onNext, phoneNumber, onTimeout, c
               buttonColor={colors.primary}
               style={styles.button}
               contentStyle={styles.buttonContent}
-              disabled={timeLeft === 0}
+              disabled={timeLeft === 0 || loading}
+              loading={loading}
             >
-              Onayla
+              {loading ? 'Doğrulanıyor...' : 'Onayla'}
             </Button>
 
             <Button

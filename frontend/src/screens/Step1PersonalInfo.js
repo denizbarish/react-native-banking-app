@@ -14,8 +14,10 @@ import {
   Text,
   Surface,
   Checkbox,
+  ActivityIndicator,
 } from 'react-native-paper';
 import { colors } from '../theme/colors';
+import { authService } from '../services/authService';
 import StepIndicator from '../components/StepIndicator';
 
 export default function Step1PersonalInfo({ onNext, currentStep, maxStepReached, onStepPress, initialData }) {
@@ -26,6 +28,7 @@ export default function Step1PersonalInfo({ onNext, currentStep, maxStepReached,
   const [agreedToTerms, setAgreedToTerms] = useState(initialData?.agreedToTerms || false);
   const [error, setError] = useState('');
   const [showTermsModal, setShowTermsModal] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const generateSecurityCode = () => {
     return Math.floor(1000 + Math.random() * 9000).toString();
@@ -60,6 +63,7 @@ export default function Step1PersonalInfo({ onNext, currentStep, maxStepReached,
     }
 
     setError('');
+    // API çağrısı yapmadan sadece veriyi topla
     onNext({ 
       tcNo, 
       countryCode,

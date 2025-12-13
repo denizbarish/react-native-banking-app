@@ -14,6 +14,7 @@ import {
 } from 'react-native-paper';
 import { CameraView, useCameraPermissions } from 'expo-camera';
 import { colors } from '../theme/colors';
+import { authService } from '../services/authService';
 import StepIndicator from '../components/StepIndicator';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
@@ -105,13 +106,17 @@ export default function Step4FaceVerification({ onNext, currentStep, maxStepReac
     setInstruction('Sağ tarafa bakış doğrulanıyor...');
     
     setTimeout(() => {
+      // API çağrısı yapmadan sadece doğrulamayı tamamla
       setVerificationStep('complete');
       setLoading(false);
       setVerified(true);
       setInstruction('Yüz doğrulama başarılı!');
       
       setTimeout(() => {
-        onNext({ faceVerified: true });
+        onNext({ 
+          faceVerified: true,
+          faceVerificationTimestamp: new Date().toISOString()
+        });
       }, 2000);
     }, 2000);
   };

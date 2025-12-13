@@ -76,6 +76,55 @@ export const authService = {
       );
     }
   },
+
+  submitApplication: async (applicationData) => {
+    try {
+      const response = await apiClient.post('/accounts/register', applicationData);
+      return response.data;
+    } catch (error) {
+      throw new Error(
+        error.response?.data?.message || 'Başvuru gönderilemedi'
+      );
+    }
+  },
+
+  sendSMS: async (phone) => {
+    try {
+      const response = await apiClient.post('/auth/send-sms', {
+        phone,
+      });
+      return response.data;
+    } catch (error) {
+      throw new Error(
+        error.response?.data?.message || 'SMS gönderilemedi'
+      );
+    }
+  },
+
+  verifySMS: async (phone, code) => {
+    try {
+      const response = await apiClient.post('/auth/verify-sms', {
+        phone,
+        code,
+      });
+      return response.data;
+    } catch (error) {
+      throw new Error(
+        error.response?.data?.message || 'SMS doğrulaması başarısız'
+      );
+    }
+  },
+
+  verifyFace: async (faceData) => {
+    try {
+      const response = await apiClient.post('/auth/verify-face', faceData);
+      return response.data;
+    } catch (error) {
+      throw new Error(
+        error.response?.data?.message || 'Yüz doğrulaması başarısız'
+      );
+    }
+  },
 };
 
 export const accountService = {

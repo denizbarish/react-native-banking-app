@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { Alert } from 'react-native';
+import { authService } from '../services/authService';
 import Step1PersonalInfo from './Step1PersonalInfo';
 import Step2SmsVerification from './Step2SmsVerification';
 import Step3ProductInfo from './Step3ProductInfo';
@@ -46,12 +48,72 @@ export default function ApplicationFlow({ onComplete }) {
     setMaxStepReached(Math.max(maxStepReached, 5));
   };
 
-  const handleStep5Complete = (data) => {
+  const handleStep5Complete = async (data) => {
     const finalData = { ...applicationData, ...data };
     setApplicationData(finalData);
     console.log('Application completed:', finalData);
-    if (onComplete) {
-      onComplete(finalData);
+    
+    try {
+      // Tüm başvuru verilerini tek seferde backend'e gönder
+      const response = await authService.submitApplication({
+        // Step 1 - Kişisel Bilgiler
+        tcNo: finalData.tcNo,
+        phone: finalData.fullPhone || finalData.phone,
+        countryCode: finalData.countryCode,
+        agreedToTerms: finalData.agreedToTerms,
+        
+        // Step 2 - SMS Doğrulama
+        smsCode: finalData.smsCode,
+        smsVerified: finalData.smsVerified,
+        
+        // Step 3 - Ürün ve Bilgiler
+        selectedProducts: finalData.selectedProducts,
+        income: finalData.income,
+        wealthSource: finalData.wealthSource,
+        transactionVolume: finalData.transactionVolume,
+        education: finalData.education,
+        employmentStatus: finalData.employmentStatus,
+        sector: finalData.sector,
+        occupation: finalData.occupation,
+        email: finalData.email,
+        dataConsent: finalData.dataConsent,
+        marketingConsent: finalData.marketingConsent,
+        
+        // Step 4 - Yüz Doğrulama
+        faceVerified: finalData.faceVerified,
+        faceVerificationTimestamp: finalData.faceVerificationTimestamp,
+        
+        // Step 5 - Müşteri Temsilcisi
+        hearingImpaired: finalData.hearingImpaired,
+        
+        // Başvuru zamanı
+        applicationDate: new Date().toISOString(),
+      });
+      
+      Alert.alert(
+        'Başvuru Başarılı',
+        'Başvurunuz başarıyla alınmıştır. En kısa sürede tarafınıza dönüş yapılacaktır.',
+        [
+          {
+            text: 'Tamam',
+            onPress: () => {
+              if (onComplete) {
+                onComplete(response);
+              }
+            }
+          }
+        ]
+      );
+    } catch (error) {
+      Alert.alert(
+        'Başvuru Hatası',
+        error.message || 'Başvurunuz gönderilirken bir hata oluştu. Lütfen tekrar deneyin.',
+        [
+          {
+            text: 'Tamam'
+          }
+        ]
+      );
     }
   };
 

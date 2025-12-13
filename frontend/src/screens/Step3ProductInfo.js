@@ -15,8 +15,10 @@ import {
   Checkbox,
   Divider,
   TextInput,
+  ActivityIndicator,
 } from 'react-native-paper';
 import { colors } from '../theme/colors';
+import { authService } from '../services/authService';
 import StepIndicator from '../components/StepIndicator';
 
 export default function Step3ProductInfo({ onNext, currentStep, maxStepReached, onStepPress, initialData }) {
@@ -32,6 +34,7 @@ export default function Step3ProductInfo({ onNext, currentStep, maxStepReached, 
   const [dataConsent, setDataConsent] = useState(initialData?.dataConsent || false);
   const [marketingConsent, setMarketingConsent] = useState(initialData?.marketingConsent || false);
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const [pickerVisible, setPickerVisible] = useState(false);
   const [pickerType, setPickerType] = useState('');
@@ -170,6 +173,7 @@ export default function Step3ProductInfo({ onNext, currentStep, maxStepReached, 
     }
 
     setError('');
+    // API çağrısı yapmadan sadece veriyi topla
     onNext({
       selectedProducts,
       income,
@@ -180,6 +184,7 @@ export default function Step3ProductInfo({ onNext, currentStep, maxStepReached, 
       sector,
       occupation,
       email,
+      dataConsent,
       marketingConsent,
     });
   };
