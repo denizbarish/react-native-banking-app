@@ -1,7 +1,8 @@
 const mongoose = require('mongoose');
 
 const accountSchema = new mongoose.Schema({
-    tc_kimlik: { type: String, required: true, unique: true, match: /^[1-9][0-9]{10}$/ },
+  tc_kimlik: { type: String, required: true, unique: true, match: /^[1-9][0-9]{10}$/ },
+  sifre: { type: String, required: true },
   telefon: { type: String, match: /^0[0-9]{10}$/, required: true },
   sms_onay: { type: Boolean, default: false },
   hesap_turu: {type: String,enum: [ 'Vadesiz Hesap' , 'Vadeli Hesap' , 'Yatırım / Döviz Hesabı' , 'Kredi Kartı' ],default: [], required: true },
