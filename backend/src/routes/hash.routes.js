@@ -6,6 +6,6 @@ const hashController = require('../controllers/hash.controller');
 router.post('/hash', hashController.hash);
 
 // POST /api/hash/checkhash
-router.post('/checkhash', hashController.checkhash);
+router.post('/check', hashController.checkhash);
 
 module.exports = router;

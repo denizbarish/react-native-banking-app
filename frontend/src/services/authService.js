@@ -3,7 +3,7 @@ import axios from 'axios';
 // localhost sadece web tarayıcıda çalışır
 // React Native için bilgisayarınızın IP adresini kullanın
 // Örnek: const API_BASE_URL = 'http://192.168.1.100:3000/api';
-const API_BASE_URL = 'http://localhost:3000/api';
+const API_BASE_URL = 'http://192.168.1.79:3000/api';
 
 console.log('🌐 API Base URL:', API_BASE_URL);
 

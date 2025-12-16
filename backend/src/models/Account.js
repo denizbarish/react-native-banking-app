@@ -7,7 +7,7 @@ const accountSchema = new mongoose.Schema({
   sms_onay: { type: Boolean, default: false },
   hesap_turu: {type: String,enum: [ 'Vadesiz Hesap' , 'Vadeli Hesap' , 'Yatırım / Döviz Hesabı' , 'Kredi Kartı' ],default: [], required: true },
   aylik_gelir: {type: String,enum: ['0 - 10.000 TL','10.000 - 25.000 TL','25.000 - 50.000 TL','50.000 - 100.000 TL','100.000 TL üzeri'],required: true},
-  mal_varlik: {type: Array,enum: [ 'Maaş', 'Kira' , 'Araç' , 'Miras' ],default: [], required: true },
+  mal_varlik: {type: Array,default: [], required: true },
   islem_hacmi: {type: String,enum: ['0 - 50.000 TL','50.000 - 100.000 TL','100.000 - 500.000 TL','500.000 TL üzeri'],required: true},
   egitim_durumu: { type: String,enum: ['İlkokul','Ortaokul','Lise','Ön Lisans','Lisans','Yüksek Lisans','Doktora'],required: true},
   calisma_durumu: { type: String,enum: ['Çalışıyor','Çalışmıyor','Emekli','Öğrenci'],required: true},
