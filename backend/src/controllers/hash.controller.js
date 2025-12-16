@@ -9,7 +9,7 @@ const hash = async (req, res) => {
 
 const checkhash = async (req, res) => {
         const { data, value } = req.body;
-        const kontrolislemi = await bcrypt.compare(this.hash(value), this.hash(data));
+        const kontrolislemi = await bcrypt.compare(this.hash(value), data);
         res.status(200).json({ kontrolislemi });  
 };
 
