@@ -5,6 +5,9 @@ const cors = require('cors');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+console.log('🚀 Server başlatılıyor...');
+console.log('Port:', PORT);
+
 // Middleware
 app.use(cors());
 app.use(express.json());
@@ -41,5 +44,7 @@ app.use((err, req, res, next) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+  console.log(`✅ Server is running on port ${PORT}`);
+  console.log(`📍 API endpoint: http://localhost:${PORT}/api`);
+  console.log('🔄 Middleware aktif - istekler loglanacak\n');
 });

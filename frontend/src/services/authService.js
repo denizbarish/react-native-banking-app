@@ -1,6 +1,11 @@
 import axios from 'axios';
 
+// localhost sadece web tarayıcıda çalışır
+// React Native için bilgisayarınızın IP adresini kullanın
+// Örnek: const API_BASE_URL = 'http://192.168.1.100:3000/api';
 const API_BASE_URL = 'http://localhost:3000/api';
+
+console.log('🌐 API Base URL:', API_BASE_URL);
 
 const apiClient = axios.create({
   baseURL: API_BASE_URL,
@@ -12,9 +17,12 @@ const apiClient = axios.create({
 
 apiClient.interceptors.request.use(
   async (config) => {
+    console.log('📤 İstek gönderiliyor:', config.method?.toUpperCase(), config.url);
+    console.log('📦 Data:', config.data);
     return config;
   },
   (error) => {
+    console.error('❌ İstek hatası:', error);
     return Promise.reject(error);
   }
 );
