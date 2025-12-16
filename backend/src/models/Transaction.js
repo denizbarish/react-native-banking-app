@@ -9,12 +9,8 @@ alici_ad_soyad: { type: String, required: true },
 miktar: { type: Number, required: true, min: 0.01 },
 islem_tarihi: { type: Date, default: Date.now},
 kesinti_tutari: { type: Number, required: true, min: 0.00 },
-<<<<<<< HEAD
-}, {
-=======
 },
 {
->>>>>>> def11cbb20072004c464e1d14753507cf5356fc6
   timestamps: true
 });
 
