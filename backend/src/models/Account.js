@@ -12,7 +12,7 @@ const accountSchema = new mongoose.Schema({
   calisma_durumu: { type: String,enum: ['Çalışıyor','Çalışmıyor','Emekli','Öğrenci'],required: true},
   calisma_sektoru: { type: String,enum: ['Kamu','Özel Sektör','Serbest Meslek','Ticaret','Diğer'],required: true}
 }, {
-  timestamps: true
+timestamps: true
 });
 
 module.exports = mongoose.model('Account', accountSchema);
