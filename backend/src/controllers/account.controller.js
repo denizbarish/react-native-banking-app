@@ -62,5 +62,4 @@ module.exports = {
   updateAccount,
   deleteAccount
 };
-git config--global user.name "cansinicim"
-git config--global user.email "cansinicim148@gmail.com"
+
