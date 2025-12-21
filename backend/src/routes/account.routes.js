@@ -8,13 +8,13 @@ router.post('/register', accountController.register);
 // GET /api/accounts
 router.get('/', accountController.getAccounts);
 
-// GET /api/accounts/:id
-router.get('/:id', accountController.getAccountById);
+// GET /api/accounts/:tc
+router.get('/:tc', accountController.getAccountByTC);
 
-// PUT /api/accounts/:id
-router.put('/:id', accountController.updateAccount);
+// PUT /api/accounts/:tc
+router.put('/:tc', accountController.updateAccount);
 
-// DELETE /api/accounts/:id
-router.delete('/:id', accountController.deleteAccount);
+// DELETE /api/accounts/:tc
+router.delete('/:tc', accountController.deleteAccount);
 
 module.exports = router;
