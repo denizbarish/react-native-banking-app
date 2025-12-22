@@ -15,10 +15,13 @@ app.use(express.urlencoded({ extended: true }));
 
 // Request logging middleware
 app.use((req, res, next) => {
-  console.log(`\n📥 ${req.method} ${req.url}`);
-  console.log('Body:', req.body);
-  console.log('Query:', req.query);
-  console.log('Params:', req.params);
+  const timestamp = new Date().toISOString();
+  console.log('\n' + '='.repeat(50));
+  console.log(`[${timestamp}] ${req.method} ${req.url}`);
+  console.log('Headers:', JSON.stringify(req.headers, null, 2));
+  console.log('Body:', JSON.stringify(req.body, null, 2));
+  console.log('Query:', JSON.stringify(req.query, null, 2));
+  console.log('='.repeat(50) + '\n');
   next();
 });
 
@@ -48,5 +51,10 @@ app.use((err, req, res, next) => {
 app.listen(PORT, () => {
   console.log(`✅ Server is running on port ${PORT}`);
   console.log(`📍 API endpoint: http://localhost:${PORT}/api`);
+  
+  // Backend çalıştığını anlamak için heartbeat
+  setInterval(() => {
+    console.log('💓 Backend alive -', new Date().toLocaleTimeString());
+  }, 5000);
   console.log('🔄 Middleware aktif - istekler loglanacak\n');
 });
