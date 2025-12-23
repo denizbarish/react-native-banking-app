@@ -13,12 +13,13 @@ const hash = async (req, res) => {
 
 const checkhash = async (req, res) => {
   try {
-        const { value,data } = req.body;
-        const kontrolislemi = await bcrypt.compare(this.hash(value), data);
-        res.status(200).json({ kontrolislemi });  }
-      catch (error) {
+        const { value, data } = req.body;
+        const kontrolislemi = await bcrypt.compare(value, data);
+        res.status(200).json({ kontrolislemi });  
+  } catch (error) {
+        console.error('CheckHash Error:', error);
         res.status(500).json({ message: 'Hash Doğrulama Hatası!' });
-      }
+  }
 }; 
 
   module.exports = {

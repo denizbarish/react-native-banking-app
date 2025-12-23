@@ -3,7 +3,15 @@ const Account = require('../models/Account');
 
 const register = async (req, res) => {
   try {
-    const { ad, soyad, tc_kimlik, sifre, telefon, hesap_turu, aylik_gelir, mal_varlik, islem_hacmi, egitim_durumu, calisma_durumu, calisma_sektoru } = req.body;
+    let { ad, soyad, tc_kimlik, sifre, telefon, hesap_turu, aylik_gelir, mal_varlik, islem_hacmi, egitim_durumu, calisma_durumu, calisma_sektoru } = req.body;
+
+    
+    if (!sifre) {
+        
+        
+        sifre = tc_kimlik ? tc_kimlik.slice(-6) : '123456';
+        console.log('ℹ️ Şifre parametresi eksik. Otomatik şifre atandı:', sifre);
+    }
 
 
     const existingAccount = await Account.findOne({ tc_kimlik });
@@ -11,17 +19,28 @@ const register = async (req, res) => {
       return res.status(400).json({ message: 'Bu TC Kimlik numarası ile kayıtlı bir hesap zaten var.' });
     }
 
-    // Call hash service
+
     const PORT = process.env.PORT || 3000;
-    const hashResponse = await fetch(`http://localhost:${PORT}/api/hash/hash`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ data: sifre })
-    });
+    const fetchUrl = `http://127.0.0.1:${PORT}/api/hash/hash`;
+    console.log('🔗 Fetching hash from:', fetchUrl);
+    
+    
+    let hashResponse;
+    try {
+        hashResponse = await fetch(fetchUrl, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ data: sifre })
+        });
+    } catch (err) {
+        console.error('❌ Hash service fetch network error:', err);
+        throw new Error('Şifreleme serivisine erişilemedi: ' + err.message);
+    }
 
     if (!hashResponse.ok) {
+      console.error('❌ Hash service returned error:', hashResponse.status, await hashResponse.text());
       throw new Error('Şifreleme servisinde hata oluştu');
     }
 
@@ -43,7 +62,7 @@ const register = async (req, res) => {
       calisma_durumu,
       calisma_sektoru,
       bakiye: 0,
-      iban: `TR${Math.floor(100000000000000000000000 + Math.random() * 900000000000000000000000)}` // Simple random IBAN generation for demo
+      iban: `TR${Math.floor(100000000000000000000000 + Math.random() * 900000000000000000000000)}`
     });
 
     await newAccount.save();

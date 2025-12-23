@@ -173,7 +173,7 @@ export default function Step3ProductInfo({ onNext, currentStep, maxStepReached, 
     }
 
     setError('');
-    // API çağrısı yapmadan sadece veriyi topla
+    
     onNext({
       selectedProducts,
       income,

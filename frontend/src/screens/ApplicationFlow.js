@@ -54,19 +54,19 @@ export default function ApplicationFlow({ onComplete }) {
     console.log('Application completed:', finalData);
     
     try {
-      // Tüm başvuru verilerini tek seferde backend'e gönder
+      
       const response = await authService.submitApplication({
-        // Step 1 - Kişisel Bilgiler
+        
         tcNo: finalData.tcNo,
         phone: finalData.fullPhone || finalData.phone,
         countryCode: finalData.countryCode,
         agreedToTerms: finalData.agreedToTerms,
         
-        // Step 2 - SMS Doğrulama
+        
         smsCode: finalData.smsCode,
         smsVerified: finalData.smsVerified,
         
-        // Step 3 - Ürün ve Bilgiler
+        
         selectedProducts: finalData.selectedProducts,
         income: finalData.income,
         wealthSource: finalData.wealthSource,
@@ -79,14 +79,14 @@ export default function ApplicationFlow({ onComplete }) {
         dataConsent: finalData.dataConsent,
         marketingConsent: finalData.marketingConsent,
         
-        // Step 4 - Yüz Doğrulama
+        
         faceVerified: finalData.faceVerified,
         faceVerificationTimestamp: finalData.faceVerificationTimestamp,
         
-        // Step 5 - Müşteri Temsilcisi
+        
         hearingImpaired: finalData.hearingImpaired,
         
-        // Başvuru zamanı
+        
         applicationDate: new Date().toISOString(),
       });
       

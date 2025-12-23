@@ -25,7 +25,7 @@ export default function Step4FaceVerification({ onNext, currentStep, maxStepReac
   const [loading, setLoading] = useState(false);
   const [verified, setVerified] = useState(false);
   const [cameraPermissionGranted, setCameraPermissionGranted] = useState(false);
-  const [verificationStep, setVerificationStep] = useState('permission'); // permission, scanning, turnLeft, turnRight, complete
+  const [verificationStep, setVerificationStep] = useState('permission'); 
   const [instruction, setInstruction] = useState('');
   const cameraRef = useRef(null);
 
@@ -106,7 +106,7 @@ export default function Step4FaceVerification({ onNext, currentStep, maxStepReac
     setInstruction('Sağ tarafa bakış doğrulanıyor...');
     
     setTimeout(() => {
-      // API çağrısı yapmadan sadece doğrulamayı tamamla
+      
       setVerificationStep('complete');
       setLoading(false);
       setVerified(true);
