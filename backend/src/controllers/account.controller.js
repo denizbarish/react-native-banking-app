@@ -3,7 +3,8 @@ const Account = require('../models/Account');
 
 const register = async (req, res) => {
   try {
-    const { tc_kimlik, sifre, telefon, hesap_turu, aylik_gelir, mal_varlik, islem_hacmi, egitim_durumu, calisma_durumu, calisma_sektoru } = req.body;
+    const { ad, soyad, tc_kimlik, sifre, telefon, hesap_turu, aylik_gelir, mal_varlik, islem_hacmi, egitim_durumu, calisma_durumu, calisma_sektoru } = req.body;
+
 
     const existingAccount = await Account.findOne({ tc_kimlik });
     if (existingAccount) {
@@ -28,6 +29,8 @@ const register = async (req, res) => {
     const hashedPassword = hashData.hashdata;
 
     const newAccount = new Account({
+      ad,
+      soyad,
       tc_kimlik,
       sifre: hashedPassword,
       telefon,
@@ -37,7 +40,10 @@ const register = async (req, res) => {
       islem_hacmi,
       egitim_durumu,
       calisma_durumu,
-      calisma_sektoru
+      calisma_durumu,
+      calisma_sektoru,
+      bakiye: 0,
+      iban: `TR${Math.floor(100000000000000000000000 + Math.random() * 900000000000000000000000)}` // Simple random IBAN generation for demo
     });
 
     await newAccount.save();

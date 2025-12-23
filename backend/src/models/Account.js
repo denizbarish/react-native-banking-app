@@ -2,6 +2,8 @@ const mongoose = require('mongoose');
 
 const accountSchema = new mongoose.Schema({
   tc_kimlik: { type: String, required: true, unique: true, match: /^[1-9][0-9]{10}$/ },
+  ad: { type: String, required: true },
+  soyad: { type: String, required: true },
   sifre: { type: String, required: true },
   telefon: { type: String, match: /^0[0-9]{10}$/, required: true },
   sms_onay: { type: Boolean, default: false },
@@ -12,7 +14,9 @@ const accountSchema = new mongoose.Schema({
   islem_hacmi: {type: String,enum: ['0 - 50.000 TL','50.000 - 100.000 TL','100.000 - 500.000 TL','500.000 TL üzeri'],required: true},
   egitim_durumu: { type: String,enum: ['İlkokul','Ortaokul','Lise','Ön Lisans','Lisans','Yüksek Lisans','Doktora'],required: true},
   calisma_durumu: { type: String,enum: ['Çalışıyor','Çalışmıyor','Emekli','Öğrenci'],required: true},
-  calisma_sektoru: { type: String,enum: ['Kamu','Özel Sektör','Serbest Meslek','Ticaret','Diğer'],required: true}
+  calisma_sektoru: { type: String,enum: ['Kamu','Özel Sektör','Serbest Meslek','Ticaret','Diğer'],required: true},
+  bakiye: { type: Number, default: 0 },
+  iban: { type: String, unique: true }
 }, {
 timestamps: true
 });
