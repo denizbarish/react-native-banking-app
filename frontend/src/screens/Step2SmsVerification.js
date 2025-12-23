@@ -27,7 +27,7 @@ export default function Step2SmsVerification({ onNext, phoneNumber, onTimeout, c
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    // SMS gönder
+    
     const sendSMS = async () => {
       try {
         await authService.sendSMS(phoneNumber);
@@ -89,7 +89,7 @@ export default function Step2SmsVerification({ onNext, phoneNumber, onTimeout, c
     setLoading(true);
 
     try {
-      // Backend'e SMS doğrulama isteği gönder
+      
       await authService.verifySMS(phoneNumber, code);
       onNext({ smsCode: code, smsVerified: true });
     } catch (err) {

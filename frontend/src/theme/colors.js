@@ -1,8 +1,8 @@
 export const colors = {
-  primary: '#8B0000', // Koyu kırmızı (Dark Red)
+  primary: '#8B0000', 
   primaryLight: '#A52A2A',
   primaryDark: '#5C0000',
-  secondary: '#FFFFFF', // Beyaz
+  secondary: '#FFFFFF', 
   background: '#F5F5F5',
   surface: '#FFFFFF',
   text: '#1A1A1A',

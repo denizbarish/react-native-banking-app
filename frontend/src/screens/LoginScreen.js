@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+
 import {
   View,
   StyleSheet,
@@ -8,6 +9,7 @@ import {
   Image,
   TouchableWithoutFeedback,
   Keyboard,
+  Alert
 } from 'react-native';
 import {
   TextInput,
@@ -19,12 +21,32 @@ import {
 import { colors } from '../theme/colors';
 import { authService } from '../services/authService';
 
-export default function LoginScreen({ onStartApplication, onLoginSuccess }) {
+export default function LoginScreen({ onStartApplication, onLoginSuccess, onAdminLogin }) {
   const [tcNo, setTcNo] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [secureTextEntry, setSecureTextEntry] = useState(true);
+  const [logoTapCount, setLogoTapCount] = useState(0);
+
+  const handleLogoTap = () => {
+    const newCount = logoTapCount + 1;
+    setLogoTapCount(newCount);
+    
+    
+    if (newCount === 1) {
+        setTimeout(() => setLogoTapCount(0), 3000);
+    }
+
+    if (newCount === 5) {
+        Alert.alert('Admin Paneli', 'Admin paneline giriş yapılıyor...', [
+            { text: 'Tamam', onPress: () => {
+                setLogoTapCount(0);
+                if (onAdminLogin) onAdminLogin();
+            }}
+        ]);
+    }
+  };
 
   const handleLogin = async () => {
     if (!tcNo || !password) {
@@ -48,11 +70,9 @@ export default function LoginScreen({ onStartApplication, onLoginSuccess }) {
     try {
       const response = await authService.login(tcNo, password);
       console.log('Login successful:', response);
-      // Token'ı kaydet (gelecekte AsyncStorage kullanılabilir)
       if (response.token) {
-        // await AsyncStorage.setItem('token', response.token);
+        
       }
-      // Başarılı giriş - Ana ekrana yönlendir
       setError('');
       if (onLoginSuccess) {
         onLoginSuccess(response.user);
@@ -75,11 +95,13 @@ export default function LoginScreen({ onStartApplication, onLoginSuccess }) {
           keyboardShouldPersistTaps="handled"
         >
           <View style={styles.logoContainer}>
-            <Image 
-              source={require('../../assets/icon.png')} 
-              style={styles.logoImage}
-              resizeMode="contain"
-            />
+            <TouchableWithoutFeedback onPress={handleLogoTap}>
+                <Image 
+                source={require('../../assets/icon.png')} 
+                style={styles.logoImage}
+                resizeMode="contain"
+                />
+            </TouchableWithoutFeedback>
             <Text style={styles.bankName}>DOU BANK</Text>
             <Text style={styles.tagline}>Güvenli Bankacılık</Text>
           </View>

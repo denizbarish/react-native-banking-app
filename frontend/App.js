@@ -6,9 +6,11 @@ import { theme } from './src/theme/theme';
 import LoginScreen from './src/screens/LoginScreen';
 import ApplicationFlow from './src/screens/ApplicationFlow';
 import HomeScreen from './src/screens/HomeScreen';
+import AdminPanel from './src/screens/AdminPanel';
 
 export default function App() {
   const [showApplication, setShowApplication] = useState(false);
+  const [showAdmin, setShowAdmin] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [user, setUser] = useState(null);
 
@@ -28,12 +30,15 @@ export default function App() {
         <StatusBar style="auto" />
         {isLoggedIn ? (
           <HomeScreen user={user} onLogout={handleLogout} />
+        ) : showAdmin ? (
+          <AdminPanel onLogout={() => setShowAdmin(false)} />
         ) : showApplication ? (
           <ApplicationFlow onComplete={() => setShowApplication(false)} />
         ) : (
           <LoginScreen 
             onStartApplication={() => setShowApplication(true)}
             onLoginSuccess={handleLoginSuccess}
+            onAdminLogin={() => setShowAdmin(true)}
           />
         )}
       </PaperProvider>

@@ -1,7 +1,7 @@
-// Validation middleware
+
 
 const validateRegistration = (req, res) => {
-  // Validation logic here
+  
 };
 
 const validateLogin = (req, res) => {
@@ -18,7 +18,7 @@ const validateLogin = (req, res) => {
 };
 
 const validateTransaction = (req, res) => {
-  // Validation logic here
+  
 };
 
 module.exports = {

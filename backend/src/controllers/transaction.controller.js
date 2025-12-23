@@ -3,9 +3,6 @@ const Account = require('../models/Account');
 
 const getTransactions = async (req, res) => {
   try {
-    // Assuming we want transactions for a specific user, identified by their IBAN provided in body or query
-    // If not provided, maybe return all? But usually it's per user.
-    // Let's check for 'iban' in body or query.
     const iban = req.body.iban || req.query.iban;
 
     let query = {};
@@ -41,7 +38,6 @@ const createTransaction = async (req, res) => {
   try {
     const { gonderici_ıban, alici_ıban, miktar } = req.body;
 
-    // Validate inputs
     if (!gonderici_ıban || !alici_ıban || !miktar) {
       return res.status(400).json({ message: 'Lütfen tüm alanları doldurun.' });
     }
@@ -55,30 +51,25 @@ const createTransaction = async (req, res) => {
     }
 
 
-    // Find Sender
     const gonderici = await Account.findOne({ iban: gonderici_ıban });
     if (!gonderici) {
       return res.status(404).json({ message: 'Gönderici hesap bulunamadı.' });
     }
 
-    // Find Receiver
     const alici = await Account.findOne({ iban: alici_ıban });
     if (!alici) {
       return res.status(404).json({ message: 'Alıcı hesap bulunamadı.' });
     }
 
-    // Check Balance
     if (gonderici.bakiye < miktar) {
       return res.status(400).json({ message: 'Yetersiz bakiye.' });
     }
 
-    // Perform Transfer
     gonderici.bakiye -= miktar;
     alici.bakiye += miktar;
 
-    // Create Transaction Record
-    const dekont_url = `DOC-${Date.now()}-${Math.floor(Math.random() * 1000)}`; // Simple fake dekont ID
-    const kesinti_tutari = 0; // Free for now
+    const dekont_url = `DOC-${Date.now()}-${Math.floor(Math.random() * 1000)}`; 
+    const kesinti_tutari = 0; 
 
     const newTransaction = new Transaction({
       dekont_url,
@@ -91,7 +82,6 @@ const createTransaction = async (req, res) => {
       islem_tarihi: new Date()
     });
 
-    // Save everything
     await gonderici.save();
     await alici.save();
     await newTransaction.save();
@@ -99,9 +89,6 @@ const createTransaction = async (req, res) => {
     res.status(201).json({ message: 'İşlem başarılı.', transaction: newTransaction });
 
   } catch (error) {
-    // Determine if we need to rollback?
-    // In a real app we'd use transactions (startSession).
-    // For now, just return error.
     res.status(500).json({ message: error.message });
   }
 };

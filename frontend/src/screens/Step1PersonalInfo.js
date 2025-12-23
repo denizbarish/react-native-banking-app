@@ -30,6 +30,8 @@ export default function Step1PersonalInfo({ onNext, currentStep, maxStepReached,
   const [showTermsModal, setShowTermsModal] = useState(false);
   const [loading, setLoading] = useState(false);
 
+  const [fullName, setFullName] = useState(initialData?.fullName || '');
+
   const generateSecurityCode = () => {
     return Math.floor(1000 + Math.random() * 9000).toString();
   };
@@ -37,9 +39,14 @@ export default function Step1PersonalInfo({ onNext, currentStep, maxStepReached,
   const [displayCode] = useState(generateSecurityCode());
 
   const handleContinue = () => {
-    if (!tcNo || !phone || !securityCode) {
+    if (!fullName || !tcNo || !phone || !securityCode) {
       setError('Lütfen tüm alanları doldurun');
       return;
+    }
+
+    if (fullName.trim().split(' ').length < 2) {
+        setError('Lütfen ad ve soyadınızı tam giriniz');
+        return;
     }
 
     if (tcNo.length !== 11) {
@@ -63,8 +70,16 @@ export default function Step1PersonalInfo({ onNext, currentStep, maxStepReached,
     }
 
     setError('');
-    // API çağrısı yapmadan sadece veriyi topla
+    
+    // Split name and surname
+    const parts = fullName.trim().split(/\s+/);
+    const surname = parts.pop();
+    const name = parts.join(' ');
+
     onNext({ 
+      fullName,
+      name,
+      surname,
       tcNo, 
       countryCode,
       phone, 
@@ -72,6 +87,8 @@ export default function Step1PersonalInfo({ onNext, currentStep, maxStepReached,
       agreedToTerms 
     });
   };
+
+
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -82,6 +99,17 @@ export default function Step1PersonalInfo({ onNext, currentStep, maxStepReached,
             <View style={styles.header}>
               <Text style={styles.title}>Kişisel Bilgiler</Text>
             </View>
+
+            <TextInput
+              label="Ad Soyad"
+              value={fullName}
+              onChangeText={setFullName}
+              mode="outlined"
+              autoCapitalize="words"
+              style={styles.input}
+              outlineColor={colors.border}
+              activeOutlineColor={colors.primary}
+            />
 
             <TextInput
               label="TC Kimlik No"
