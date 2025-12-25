@@ -16,7 +16,10 @@ const accountSchema = new mongoose.Schema({
   calisma_sektoru: { type: String,enum: ['Kamu','Özel Sektör','Serbest Meslek','Ticaret','Diğer'],required: true},
   bakiye: { type: Number, default: 0 },
   basvuru_durumu: { type: String, enum: ['Beklemede', 'Onaylandı', 'Reddedildi'], default: 'Beklemede' },
-  iban: { type: String, unique: true }
+  iban: { type: String, unique: true },
+  mevcut_kredi_notu: { type: Number, default: 0 },
+  smsCode: { type: String },
+  smsCodeExpires: { type: Date }
 }, {
 timestamps: true
 });

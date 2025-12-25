@@ -145,16 +145,24 @@ export const authService = {
   },
 
   sendSMS: async (phone) => {
-    
-    return { success: true, message: 'SMS gönderildi' };
+    try {
+      const response = await apiClient.post('/auth/send-sms', { phone });
+      return response.data;
+    } catch (error) {
+       throw new Error(
+        error.response?.data?.message || 'SMS gönderilemedi'
+      );
+    }
   },
 
   verifySMS: async (phone, code) => {
-    
-    if (code === '123456') {
-      return { success: true };
-    } else {
-      throw new Error('SMS doğrulaması başarısız: Kod yanlış');
+    try {
+      const response = await apiClient.post('/auth/verify-sms', { phone, code });
+      return response.data;
+    } catch (error) {
+       throw new Error(
+        error.response?.data?.message || 'SMS doğrulama başarısız'
+      );
     }
   },
 
