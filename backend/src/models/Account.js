@@ -17,6 +17,7 @@ const accountSchema = new mongoose.Schema({
   bakiye: { type: Number, default: 0 },
   basvuru_durumu: { type: String, enum: ['Beklemede', 'Onaylandı', 'Reddedildi'], default: 'Beklemede' },
   iban: { type: String, unique: true },
+  mevcut_kredi_tutari: {type : number , default:0},
   mevcut_kredi_notu: { type: Number, default: 0 },
   smsCode: { type: String },
   smsCodeExpires: { type: Date }
