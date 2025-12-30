@@ -1,29 +1,22 @@
 const Account = require('../models/Account');
 
-
 const register = async (req, res) => {
   try {
     let { ad, soyad, tc_kimlik, sifre, telefon, hesap_turu, aylik_gelir, mal_varlik, islem_hacmi, egitim_durumu, calisma_durumu, calisma_sektoru } = req.body;
 
-    
     if (!sifre) {
-        
-        
         sifre = tc_kimlik ? tc_kimlik.slice(-6) : '123456';
-        console.log('ℹ️ Şifre parametresi eksik. Otomatik şifre atandı:', sifre);
-    }
 
+    }
 
     const existingAccount = await Account.findOne({ tc_kimlik });
     if (existingAccount) {
       return res.status(400).json({ message: 'Bu TC Kimlik numarası ile kayıtlı bir hesap zaten var.' });
     }
 
-
     const PORT = process.env.PORT || 3000;
     const fetchUrl = `http://127.0.0.1:${PORT}/api/hash/hash`;
-    console.log('🔗 Fetching hash from:', fetchUrl);
-    
+
     
     let hashResponse;
     try {
@@ -35,12 +28,12 @@ const register = async (req, res) => {
           body: JSON.stringify({ data: sifre })
         });
     } catch (err) {
-        console.error('❌ Hash service fetch network error:', err);
+
         throw new Error('Şifreleme serivisine erişilemedi: ' + err.message);
     }
 
     if (!hashResponse.ok) {
-      console.error('❌ Hash service returned error:', hashResponse.status, await hashResponse.text());
+
       throw new Error('Şifreleme servisinde hata oluştu');
     }
 
@@ -62,7 +55,6 @@ const register = async (req, res) => {
       calisma_durumu,
       calisma_sektoru,
       bakiye: 0,
-      // IBAN Format: DOU + 9 digits
       iban: `DOU${Math.floor(100000000 + Math.random() * 900000000)}`
     });
 
@@ -99,7 +91,6 @@ const updateAccount = async (req, res) => {
   try {
     const updates = { ...req.body };
 
-    // If password is being updated, hash it first
     if (updates.sifre) {
         const PORT = process.env.PORT || 3000;
         const fetchUrl = `http://127.0.0.1:${PORT}/api/hash/hash`;
@@ -118,7 +109,7 @@ const updateAccount = async (req, res) => {
             const hashData = await hashResponse.json();
             updates.sifre = hashData.hashdata;
         } catch (err) {
-            console.error('❌ Hash error in update:', err);
+
             return res.status(500).json({ message: 'Şifre güncellenirken hata oluştu' });
         }
     }
@@ -158,4 +149,3 @@ module.exports = {
   updateAccount,
   deleteAccount
 };
-

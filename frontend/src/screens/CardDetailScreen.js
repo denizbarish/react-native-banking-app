@@ -5,7 +5,6 @@ import { colors } from '../theme/colors';
 
 export default function CardDetailScreen({ card, onBack, formatCurrency, user }) {
     
-    // Calculate progress for limit usage
     const totalLimit = card.toplam_limit || 20000;
     const availableLimit = card.kullanilabilir_limit || 0;
     const usedLimit = totalLimit - availableLimit;
@@ -27,7 +26,6 @@ export default function CardDetailScreen({ card, onBack, formatCurrency, user })
             </View>
 
             <ScrollView contentContainerStyle={styles.scrollContainer}>
-                {/* Large Card Visual */}
                 <Surface style={styles.creditCard} elevation={8}>
                     <View style={styles.cardDecorationCircle} />
                     <View style={styles.cardTop}>
@@ -56,7 +54,6 @@ export default function CardDetailScreen({ card, onBack, formatCurrency, user })
                     </View>
                 </Surface>
 
-                {/* Limit Info */}
                 <Surface style={styles.infoCard} elevation={2}>
                     <Text style={styles.sectionTitle}>Limit Bilgileri</Text>
                     
@@ -73,7 +70,6 @@ export default function CardDetailScreen({ card, onBack, formatCurrency, user })
                     </View>
                 </Surface>
 
-                 {/* Debt & Dates Info */}
                  <Surface style={styles.infoCard} elevation={2}>
                     <View style={styles.row}>
                         <View style={styles.column}>
@@ -98,7 +94,6 @@ export default function CardDetailScreen({ card, onBack, formatCurrency, user })
                     </View>
                 </Surface>
 
-                 {/* Transactions (Placeholder) */}
                  {card.harcamalar && card.harcamalar.length > 0 && (
                      <Surface style={styles.infoCard} elevation={2}>
                         <Text style={styles.sectionTitle}>Son Harcamalar</Text>
@@ -278,7 +273,7 @@ const styles = StyleSheet.create({
     bigValueWarn: {
         fontSize: 20,
         fontWeight: 'bold',
-        color: colors.warning // Gold color for bonus
+        color: colors.warning 
     },
     labelSmall: {
         color: colors.textSecondary,

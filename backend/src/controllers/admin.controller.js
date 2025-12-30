@@ -71,9 +71,6 @@ const updateSystemSettings = async (req, res) => {
 const CardApplication = require('../models/CardApplication');
 const Card = require('../models/Card');
 
-// ... existing imports ...
-
-// ... existing functions ...
 
 const getCardApplications = async (req, res) => {
     try {
@@ -92,8 +89,7 @@ const approveCardApplication = async (req, res) => {
         if (!app) return res.status(404).json({ message: 'Başvuru bulunamadı' });
         if (app.status !== 'Beklemede') return res.status(400).json({ message: 'Başvuru zaten sonuçlanmış' });
 
-        // Create Real Card
-        // Generate random card details
+
         const kart_num = '4' + Math.floor(Math.random() * 1000000000000000).toString().padStart(15, '0');
         const cvv = Math.floor(Math.random() * 900 + 100).toString(); 
         

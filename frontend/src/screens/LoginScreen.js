@@ -69,7 +69,7 @@ export default function LoginScreen({ onStartApplication, onLoginSuccess, onAdmi
 
     try {
       const response = await authService.login(tcNo, password);
-      console.log('Login successful:', response);
+
       if (response.token) {
         
       }
@@ -161,18 +161,9 @@ export default function LoginScreen({ onStartApplication, onLoginSuccess, onAdmi
           >
             {loading ? 'Giriş yapılıyor...' : 'Giriş Yap'}
           </Button>
-
-          <Button
-            mode="text"
-            onPress={() => {
-              console.log('Navigate to forgot password');
-            }}
-            textColor={colors.primary}
-            style={styles.forgotButton}
-          >
-            Şifremi Unuttum
-          </Button>
         </Surface>
+
+
 
         <View style={styles.applicationContainer}>
           <Text style={styles.applicationText}>
@@ -191,10 +182,13 @@ export default function LoginScreen({ onStartApplication, onLoginSuccess, onAdmi
 
         <Text style={styles.versionText}>v0.0.1</Text>
       </ScrollView>
+
     </KeyboardAvoidingView>
     </TouchableWithoutFeedback>
   );
 }
+
+
 
 const styles = StyleSheet.create({
   container: {
@@ -286,4 +280,29 @@ const styles = StyleSheet.create({
     fontSize: 12,
     marginTop: 24,
   },
+  modalContainer: {
+    backgroundColor: 'white',
+    padding: 24,
+    margin: 20,
+    borderRadius: 16,
+  },
+  modalTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginBottom: 16,
+    color: colors.primary,
+    textAlign: 'center'
+  },
+  modalDesc: {
+    fontSize: 14,
+    color: colors.textSecondary,
+    marginBottom: 20,
+    textAlign: 'center'
+  },
+  modalActions: {
+      flexDirection: 'row',
+      justifyContent: 'flex-end',
+      marginTop: 20,
+      gap: 10
+  }
 });

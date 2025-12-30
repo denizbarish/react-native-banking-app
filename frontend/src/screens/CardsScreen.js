@@ -105,7 +105,7 @@ export default function CardsScreen({ cards, user, loading, refreshing, onRefres
                 setApplications(apps || []);
             }
         } catch (e) {
-            console.warn('Başvurular alınamadı', e);
+
         }
     };
 
@@ -121,7 +121,6 @@ export default function CardsScreen({ cards, user, loading, refreshing, onRefres
         if(user) fetchApplications();
     }, [user, refreshing]); 
 
-    // If a card is selected, show detail screen
     if(selectedCard) {
         return (
             <CardDetailScreen 
@@ -141,7 +140,6 @@ export default function CardsScreen({ cards, user, loading, refreshing, onRefres
         </View>
         <ScrollView contentContainerStyle={styles.scrollContainer} refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
             
-            {/* Active Cards */}
             {loading ? <ActivityIndicator style={{marginTop: 50}} /> : cards.length === 0 && applications.length === 0 ? (
                 <View style={styles.centerContent}>
                     <Avatar.Icon size={80} icon="credit-card-outline" style={{backgroundColor: colors.surface, marginBottom: 20}} color={colors.primary} />
@@ -152,7 +150,6 @@ export default function CardsScreen({ cards, user, loading, refreshing, onRefres
                 {cards.map((card) => (
                     <TouchableOpacity key={card._id} onPress={() => setSelectedCard(card)} activeOpacity={0.9}>
                     <Surface style={styles.creditCard} elevation={8}>
-                        {/* Background Decoration */}
                         <View style={styles.cardDecorationCircle} />
                         
                         <View style={styles.cardTop}>
@@ -177,7 +174,6 @@ export default function CardsScreen({ cards, user, loading, refreshing, onRefres
                         
                         <View style={styles.cardBottomLogo}>
                              <Text style={styles.cardLimitLabel}>LIMIT: {formatCurrency(card.kullanilabilir_limit)}</Text>
-                             {/* Mock Mastercard/Visa Logo */}
                              <View style={styles.cardLogoContainer}>
                                  <View style={[styles.cardLogoCircle, {backgroundColor: 'rgba(235, 0, 27, 0.8)'}]} />
                                  <View style={[styles.cardLogoCircle, {backgroundColor: 'rgba(247, 158, 27, 0.8)', marginLeft: -12}]} />
@@ -189,7 +185,6 @@ export default function CardsScreen({ cards, user, loading, refreshing, onRefres
                 </>
             )}
 
-            {/* Pending Applications */}
             {applications.length > 0 && (
                 <View style={{marginTop: 20}}>
                      <Text style={styles.sectionTitle}>Başvurularım</Text>
@@ -256,7 +251,7 @@ const styles = StyleSheet.create({
       padding: 20
   },
   creditCard: {
-      backgroundColor: '#0f172a', // Deep Slate / Midnight Blue
+      backgroundColor: '#0f172a', 
       borderRadius: 20,
       padding: 24,
       marginBottom: 20,
@@ -284,15 +279,14 @@ const styles = StyleSheet.create({
       width: 50,
       height: 34,
       borderRadius: 6,
-      backgroundColor: '#bf9b30', // Goldish color
+      backgroundColor: '#bf9b30', 
       borderColor: '#e8c45c',
       borderWidth: 1,
-      // Simple inner chip lines simulation could be added here if needed
   },
   cardNumber: {
       color: '#ffffff',
       fontSize: 22,
-      fontFamily: 'Courier', // Monospace font for card numbers
+      fontFamily: 'Courier', 
       fontWeight: 'bold',
       letterSpacing: 2,
       marginTop: 10,

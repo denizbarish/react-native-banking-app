@@ -18,11 +18,18 @@ const accountSchema = new mongoose.Schema({
   basvuru_durumu: { type: String, enum: ['Beklemede', 'Onaylandı', 'Reddedildi'], default: 'Beklemede' },
   iban: { type: String, unique: true },
   mevcut_kredi_tutari: {type : Number , default:0},
+  kredi_limiti: { type: Number, default: 50000 },
   mevcut_kredi_notu: { type: Number, default: 0 },
   smsCode: { type: String },
   smsCodeExpires: { type: Date },
   expo_push_token: { type: String },
-  bildirim_izni: { type: Boolean, default: true }
+  bildirim_izni: { type: Boolean, default: true },
+  doviz_varliklari: {
+    USD: { type: Number, default: 0 },
+    EUR: { type: Number, default: 0 },
+    GBP: { type: Number, default: 0 },
+    JPY: { type: Number, default: 0 }
+  }
 }, {
 timestamps: true
 });

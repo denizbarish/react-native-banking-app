@@ -37,7 +37,6 @@ export const adminService = {
     }
   },
 
-    // --- Card Applications ---
     async getCardApplications() {
         const response = await apiClient.get('/admin/card-applications');
         return response.data;

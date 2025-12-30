@@ -3,9 +3,9 @@ import axios from 'axios';
 
 
 
-const API_BASE_URL = 'http://192.168.1.105:3001/api';
+const API_BASE_URL = 'http://172.20.10.2:3001/api';
 
-console.log('🌐 API Base URL:', API_BASE_URL);
+
 
 const apiClient = axios.create({
   baseURL: API_BASE_URL,
@@ -17,12 +17,10 @@ const apiClient = axios.create({
 
 apiClient.interceptors.request.use(
   async (config) => {
-    console.log('📤 İstek gönderiliyor:', config.method?.toUpperCase(), config.url);
-    console.log('📦 Data:', config.data);
     return config;
   },
   (error) => {
-    console.error('❌ İstek hatası:', error);
+
     return Promise.reject(error);
   }
 );

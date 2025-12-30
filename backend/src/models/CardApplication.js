@@ -5,7 +5,7 @@ const cardApplicationSchema = new mongoose.Schema({
   kart_ismi: { type: String, required: true },
   limit_request: { type: Number, required: true },
   aylik_gelir: { type: Number, required: true },
-  calisma_durumu: { type: String, required: true }, // 'employed', 'student', 'retired', etc.
+  calisma_durumu: { type: String, required: true },
   status: { 
       type: String, 
       enum: ['Beklemede', 'Onaylandı', 'Reddedildi'], 

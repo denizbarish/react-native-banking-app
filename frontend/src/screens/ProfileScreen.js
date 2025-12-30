@@ -14,17 +14,15 @@ export default function ProfileScreen({ user, onLogout }) {
         } catch (e) {
             console.error('Bildirim ayarı güncellenemedi', e);
             Alert.alert('Hata', 'Ayarlar kaydedilemedi');
-            setNotificationsEnabled(!value); // Revert
+            setNotificationsEnabled(!value);
         }
     };
     
-    // Modals state
     const [phoneModalVisible, setPhoneModalVisible] = useState(false);
     const [passwordModalVisible, setPasswordModalVisible] = useState(false);
     const [helpVisible, setHelpVisible] = useState(false);
     const [agreementsVisible, setAgreementsVisible] = useState(false);
 
-    // Form state
     const [newPhone, setNewPhone] = useState('');
     const [newPassword, setNewPassword] = useState('');
     const [loading, setLoading] = useState(false);
@@ -54,7 +52,6 @@ export default function ProfileScreen({ user, onLogout }) {
         }
         setLoading(true);
         try {
-            // backend handles hashing now
             await authService.updateProfile(user.tcNo || user.tc_kimlik, { sifre: newPassword });
             Alert.alert('Başarılı', 'Şifreniz güncellendi.');
             setPasswordModalVisible(false);
@@ -68,7 +65,6 @@ export default function ProfileScreen({ user, onLogout }) {
 
     return (
     <View style={styles.container}>
-        {/* Header Section */}
         <View style={styles.header}>
             <View style={styles.headerContent}>
                 <Avatar.Text 
@@ -84,7 +80,6 @@ export default function ProfileScreen({ user, onLogout }) {
 
         <ScrollView contentContainerStyle={styles.scrollContainer} showsVerticalScrollIndicator={false}>
             
-            {/* Personal Information */}
             <Surface style={styles.sectionContainer} elevation={1}>
                 <Text style={styles.sectionTitle}>Kişisel Bilgiler</Text>
                 <List.Item
@@ -103,7 +98,6 @@ export default function ProfileScreen({ user, onLogout }) {
                 />
             </Surface>
 
-            {/* Security & Settings */}
             <Surface style={styles.sectionContainer} elevation={1}>
                 <Text style={styles.sectionTitle}>Güvenlik ve Ayarlar</Text>
                 <List.Item
@@ -121,7 +115,6 @@ export default function ProfileScreen({ user, onLogout }) {
                 />
             </Surface>
 
-            {/* Support */}
             <Surface style={styles.sectionContainer} elevation={1}>
                 <Text style={styles.sectionTitle}>Destek</Text>
                 <List.Item
@@ -155,7 +148,6 @@ export default function ProfileScreen({ user, onLogout }) {
         </ScrollView>
 
         <Portal>
-            {/* Phone Modal */}
             <Modal visible={phoneModalVisible} onDismiss={() => setPhoneModalVisible(false)} contentContainerStyle={styles.modalContent}>
                 <Text style={styles.modalTitle}>Telefon Numarası Güncelle</Text>
                 <TextInput
@@ -170,7 +162,6 @@ export default function ProfileScreen({ user, onLogout }) {
                 <Button mode="contained" onPress={handleUpdatePhone} loading={loading} style={styles.modalButton}>Güncelle</Button>
             </Modal>
 
-            {/* Password Modal */}
             <Modal visible={passwordModalVisible} onDismiss={() => setPasswordModalVisible(false)} contentContainerStyle={styles.modalContent}>
                 <Text style={styles.modalTitle}>Şifre Değiştir</Text>
                 <TextInput
@@ -184,7 +175,6 @@ export default function ProfileScreen({ user, onLogout }) {
                 <Button mode="contained" onPress={handleUpdatePassword} loading={loading} style={styles.modalButton}>Güncelle</Button>
             </Modal>
 
-            {/* Help Dialog */}
             <Dialog visible={helpVisible} onDismiss={() => setHelpVisible(false)} style={{backgroundColor: 'white'}}>
                 <Dialog.Title>Yardım Merkezi</Dialog.Title>
                 <Dialog.Content>
@@ -197,7 +187,6 @@ export default function ProfileScreen({ user, onLogout }) {
                 </Dialog.Actions>
             </Dialog>
 
-            {/* Agreements Dialog */}
             <Dialog visible={agreementsVisible} onDismiss={() => setAgreementsVisible(false)} style={{backgroundColor: 'white'}}>
                 <Dialog.Title>Sözleşmeler</Dialog.Title>
                 <Dialog.Content>
@@ -224,7 +213,7 @@ const styles = StyleSheet.create({
       backgroundColor: colors.background,
   },
   header: {
-    backgroundColor: colors.primary, // Brand color
+    backgroundColor: colors.primary,
     paddingTop: 60,
     paddingBottom: 30,
     borderBottomLeftRadius: 30,

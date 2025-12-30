@@ -27,9 +27,6 @@ export default function Step2SmsVerification({ onNext, phoneNumber, onTimeout, c
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    // Mock SMS send - just log it
-    console.log('Mock SMS sent to:', phoneNumber);
-    // You could also set a timeout to simulate network delay if desired
   }, []);
 
   useEffect(() => {
@@ -79,11 +76,9 @@ export default function Step2SmsVerification({ onNext, phoneNumber, onTimeout, c
       return;
     }
 
-    // MOCK VERIFICATION
     if (code === '123456') {
         setError('');
         setLoading(true);
-        // Simulate network delay
         setTimeout(() => {
             setLoading(false);
             onNext({ smsCode: code, smsVerified: true });
@@ -97,7 +92,6 @@ export default function Step2SmsVerification({ onNext, phoneNumber, onTimeout, c
 
   const handleResend = async () => {
     setLoading(true);
-    // Simulate resend
     setTimeout(() => {
         setLoading(false);
         setTimeLeft(180);

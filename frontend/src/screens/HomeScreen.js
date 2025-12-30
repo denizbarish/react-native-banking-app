@@ -15,6 +15,7 @@ import AccountsScreen from './AccountsScreen';
 import TransactionsScreen from './TransactionsScreen';
 import CardsScreen from './CardsScreen';
 import ProfileScreen from './ProfileScreen';
+import ExchangeScreen from './ExchangeScreen';
 
 export default function HomeScreen({ user, onLogout }) {
   const [index, setIndex] = useState(0);
@@ -22,6 +23,7 @@ export default function HomeScreen({ user, onLogout }) {
     { key: 'accounts', title: 'Hesaplar', focusedIcon: 'wallet', unfocusedIcon: 'wallet-outline' },
     { key: 'transactions', title: 'İşlemler', focusedIcon: 'history', unfocusedIcon: 'clock-outline' },
     { key: 'cards', title: 'Kartlar', focusedIcon: 'credit-card', unfocusedIcon: 'credit-card-outline' },
+    { key: 'exchange', title: 'Döviz', focusedIcon: 'currency-usd', unfocusedIcon: 'currency-usd' },
     { key: 'profile', title: 'Profil', focusedIcon: 'account', unfocusedIcon: 'account-outline' },
   ]);
 
@@ -40,7 +42,6 @@ export default function HomeScreen({ user, onLogout }) {
     try {
       setLoading(true);
 
-      // 1. Accounts
       try {
           const userTc = user?.tcNo || user?.tc_kimlik;
           if (userTc) {
@@ -49,18 +50,16 @@ export default function HomeScreen({ user, onLogout }) {
             if (accountData) setSelectedAccount(accountData);
           }
       } catch (e) {
-          console.warn('Hesaplar çekilemedi', e);
+
       }
 
-      // 2. Transactions
       try {
           const transactionsData = await transactionService.getTransactions();
           setTransactions(Array.isArray(transactionsData) ? transactionsData : []);
       } catch (e) {
-          console.warn('İşlemler çekilemedi', e);
+
       }
 
-      // 3. Cards
       try {
          const userTc = user?.tcNo || user?.tc_kimlik;
          if(userTc) {
@@ -68,11 +67,11 @@ export default function HomeScreen({ user, onLogout }) {
              setCards(Array.isArray(cardData) ? cardData : []);
          }
       } catch (e) {
-          console.warn('Kartlar çekilemedi', e)
+          // Kartlar çekilemedi
       }
 
     } catch (error) {
-      console.error('Veri yükleme hatası:', error);
+
     } finally {
       setLoading(false);
     }
@@ -88,7 +87,7 @@ export default function HomeScreen({ user, onLogout }) {
       try {
           await transactionService.createTransaction(transferData);
           Alert.alert('Başarılı', 'Transfer işleminiz gerçekleşti.');
-          onRefresh(); // Reload data
+          onRefresh();
       } catch(e) {
           Alert.alert('Hata', e.message);
       }
@@ -100,8 +99,8 @@ export default function HomeScreen({ user, onLogout }) {
           Alert.alert('Başarılı', 'Kart başvurunuz alındı ve onaylandı.');
           onRefresh();
       } catch (e) {
-          console.log(e);
-          Alert.alert('Hata', 'Kart başvurusu sırasında bir hata oluştu'); // e.message might be complex object
+
+          Alert.alert('Hata', 'Kart başvurusu sırasında bir hata oluştu');
       }
   };
 
@@ -158,6 +157,14 @@ export default function HomeScreen({ user, onLogout }) {
             onRefresh={onRefresh}
             formatCurrency={formatCurrency}
             onApply={handleCardApply}
+        />
+    ),
+    exchange: () => (
+        <ExchangeScreen 
+            loading={loading}
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+            user={user}
         />
     ),
     profile: () => <ProfileScreen user={user} onLogout={onLogout} />,

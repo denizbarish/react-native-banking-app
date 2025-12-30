@@ -6,15 +6,13 @@ import { colors } from '../theme/colors';
 const { width } = Dimensions.get('window');
 
 export default function TransactionsScreen({ transactions, accounts, loading, refreshing, onRefresh, formatCurrency, formatDate, onTransfer }) {
-  const [activeTab, setActiveTab] = useState('transfer'); // 'transfer' | 'history'
+  const [activeTab, setActiveTab] = useState('transfer');
   
-  // Transfer State
   const [receiverIban, setReceiverIban] = useState('');
   const [amount, setAmount] = useState('');
   const [description, setDescription] = useState('');
   const [transferLoading, setTransferLoading] = useState(false);
   
-  // Auto-select sender (first account)
   const senderAccount = accounts?.[0];
 
   const handleSend = async () => {
@@ -37,13 +35,13 @@ export default function TransactionsScreen({ transactions, accounts, loading, re
             miktar: numAmount,
             aciklama: description
         });
-        // Reset form on success
+
         setAmount('');
         setDescription('');
         setReceiverIban('');
         setActiveTab('history');
       } catch(e) {
-          // Error handling is done in parent, but we stop loading here
+        
       } finally {
           setTransferLoading(false);
       }

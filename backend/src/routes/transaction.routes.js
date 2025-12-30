@@ -5,9 +5,7 @@ const transactionController = require('../controllers/transaction.controller');
 
 router.get('/', transactionController.getTransactions);
 
-
 router.get('/:id', transactionController.getTransactionById);
-
 
 router.post('/', transactionController.createTransaction);
 

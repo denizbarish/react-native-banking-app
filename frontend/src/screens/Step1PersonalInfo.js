@@ -71,7 +71,6 @@ export default function Step1PersonalInfo({ onNext, currentStep, maxStepReached,
 
     setError('');
     
-    // Split name and surname
     const parts = fullName.trim().split(/\s+/);
     const surname = parts.pop();
     const name = parts.join(' ');

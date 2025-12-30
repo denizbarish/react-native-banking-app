@@ -42,17 +42,14 @@ async function registerForPushNotificationsAsync() {
       finalStatus = status;
     }
     if (finalStatus !== 'granted') {
-      console.log('Failed to get push token for push notification!');
       return;
     }
-    // Learn more about projectId:
-    // https://docs.expo.dev/push-notifications/push-notifications-setup/#configure-projectid
+    
     token = (await Notifications.getExpoPushTokenAsync({ projectId: Constants.expoConfig?.extra?.eas?.projectId })).data;
-    console.log("Expo Push Token:", token);
-  } else {
-    console.log('Must use physical device for Push Notifications');
-  }
 
+  } else {
+
+  }
   return token;
 }
 
@@ -66,18 +63,22 @@ export default function App() {
   const responseListener = useRef();
 
   useEffect(() => {
-     // Listen for incoming notifications
+     
     notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
-      console.log('🔔 Notification Received:', notification);
+
     });
 
     responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
-      console.log('🔔 Notification Clicked:', response);
+
     });
 
     return () => {
-      Notifications.removeNotificationSubscription(notificationListener.current);
-      Notifications.removeNotificationSubscription(responseListener.current);
+      if (notificationListener.current) {
+        notificationListener.current.remove();
+      }
+      if (responseListener.current) {
+        responseListener.current.remove();
+      }
     };
   }, []);
 
@@ -85,14 +86,13 @@ export default function App() {
     setUser(userData);
     setIsLoggedIn(true);
 
-    // Register for push notifications
     try {
         const token = await registerForPushNotificationsAsync();
         if (token) {
             await authService.updateProfile(userData.tcNo || userData.tc_kimlik, { expo_push_token: token });
         }
     } catch(e) {
-        console.warn('Token registration failed:', e);
+
     }
   };
 

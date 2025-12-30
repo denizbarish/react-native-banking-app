@@ -1,9 +1,3 @@
-
-
-const validateRegistration = (req, res) => {
-  
-};
-
 const validateLogin = (req, res) => {
    
   const token = localStorage.getItem('token');
@@ -17,12 +11,6 @@ const validateLogin = (req, res) => {
   }
 };
 
-const validateTransaction = (req, res) => {
-  
-};
-
 module.exports = {
-  validateRegistration,
-  validateLogin,
-  validateTransaction
+  validateLogin
 };

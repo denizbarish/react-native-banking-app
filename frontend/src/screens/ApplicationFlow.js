@@ -51,7 +51,7 @@ export default function ApplicationFlow({ onComplete }) {
   const handleStep5Complete = async (data) => {
     const finalData = { ...applicationData, ...data };
     setApplicationData(finalData);
-    console.log('Application completed:', finalData);
+
     
     try {
       

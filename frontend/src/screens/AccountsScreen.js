@@ -1,4 +1,6 @@
+import React, { useState } from 'react';
 import { View, ScrollView, RefreshControl, TouchableOpacity, StyleSheet, Text, Dimensions, Alert } from 'react-native';
+import LoanScreen from './LoanScreen';
 import { Surface, ActivityIndicator, Avatar, IconButton, Divider } from 'react-native-paper';
 import { LinearGradient } from 'expo-linear-gradient';
 import { colors } from '../theme/colors';
@@ -27,26 +29,27 @@ export default function AccountsScreen({
     );
   }
 
-  // Calculate Total Assets
   const totalAssets = accounts.reduce((sum, acc) => sum + (acc.bakiye || 0), 0);
 
-  // Filter transactions for the selected account
   const accountTransactions = selectedAccount 
     ? transactions.filter(t => 
         t.gonderici_ıban === selectedAccount.iban || 
         t.alici_ıban === selectedAccount.iban ||
         t.gonderici_ıban === selectedAccount._id || 
         t.alici_ıban === selectedAccount._id
-      ).slice(0, 5) // Last 5 transactions
+      ).slice(0, 5) 
     : [];
+
+  const [loanModalVisible, setLoanModalVisible] = React.useState(false);
 
   const handleQuickAction = (action) => {
       switch(action) {
           case 'Transfer':
-              onTabChange(1); // Navigate to Transactions Tab
+              // Assuming onTabChange(1) switches to transactions/transfer tab
+              if(onTabChange) onTabChange(1);
               break;
           case 'Kredi':
-              onTabChange(2); // Navigate to Cards/Credit Tab
+               setLoanModalVisible(true);
               break;
           default:
               break;
@@ -79,8 +82,6 @@ export default function AccountsScreen({
         }
         showsVerticalScrollIndicator={false}
       >
-        {/* Total Assets Summary */}
-        {/* Total Assets Summary */}
         <Surface style={styles.totalAssetsCard} elevation={2}>
             <View style={styles.totalAssetsHeader}>
                 <Text style={styles.totalAssetsLabel}>TOPLAM VARLIK</Text>
@@ -91,13 +92,12 @@ export default function AccountsScreen({
 
         <Text style={styles.sectionTitle}>Hesaplarım</Text>
         
-        {/* Account Cards - Horizontal Scroll */}
         <ScrollView 
             horizontal 
             showsHorizontalScrollIndicator={false} 
             contentContainerStyle={styles.cardsScrollContent}
             decelerationRate="fast"
-            snapToInterval={CARD_WIDTH + 16} // Card width + margin
+            snapToInterval={CARD_WIDTH + 16} 
         >
         {accounts.length > 0 ? (
              accounts.map((account) => {
@@ -144,14 +144,12 @@ export default function AccountsScreen({
         )}
         </ScrollView>
 
-        {/* Quick Actions */}
         <Text style={styles.sectionTitle}>Hızlı İşlemler</Text>
         <View style={styles.quickActionsContainer}>
             <QuickAction icon="swap-horizontal" label="Transfer" onPress={() => handleQuickAction('Transfer')} />
             <QuickAction icon="credit-card-plus-outline" label="Kredi" onPress={() => handleQuickAction('Kredi')} />
         </View>
 
-        {/* Recent Transactions */}
         <Text style={styles.sectionTitle}>Son Hareketler</Text>
         <Surface style={styles.transactionsContainer} elevation={1}>
             {accountTransactions.length > 0 ? (
@@ -189,6 +187,12 @@ export default function AccountsScreen({
             )}
         </Surface>
 
+        <LoanScreen 
+            user={user}
+            visible={loanModalVisible}
+            onDismiss={() => setLoanModalVisible(false)}
+            onRefresh={onRefresh}
+        />
       </ScrollView>
     </View>
   );
@@ -291,7 +295,7 @@ const styles = StyleSheet.create({
   selectedCardContainer: {
       transform: [{scale: 1.02}],
       borderWidth: 2,
-      borderColor: '#bf9b30', // Gold border for selected
+      borderColor: '#bf9b30', 
   },
   cardGradient: {
       flex: 1,
@@ -314,7 +318,7 @@ const styles = StyleSheet.create({
       letterSpacing: 0.5,
   },
   activeIndicator: {
-      backgroundColor: '#4ade80', // Green dot
+      backgroundColor: '#4ade80', 
       width: 8,
       height: 8,
       borderRadius: 4,
@@ -355,7 +359,7 @@ const styles = StyleSheet.create({
       letterSpacing: 1,
   },
   cardType: {
-      display: 'none', // Removed
+      display: 'none', 
   },
   emptyCard: {
     backgroundColor: colors.surface,
@@ -372,7 +376,7 @@ const styles = StyleSheet.create({
   },
   actionItem: {
     alignItems: 'center',
-    width: (width - 48) / 4, // 4 items evenly spaced
+    width: (width - 48) / 4, 
   },
   actionIconContainer: {
     width: 60,
