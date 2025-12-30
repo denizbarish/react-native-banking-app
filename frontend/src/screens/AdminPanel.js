@@ -25,6 +25,9 @@ export default function AdminPanel({ onLogout }) {
       if (activeTab === 'applications') {
         const data = await adminService.getApplications();
         setApplications(data);
+      } else if (activeTab === 'card_applications') {
+          const data = await adminService.getCardApplications();
+          setApplications(data);
       } else {
         const data = await adminService.getSystemSettings();
         setSettings({
@@ -38,6 +41,21 @@ export default function AdminPanel({ onLogout }) {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleCardAction = async (id, action) => {
+      try {
+          if(action === 'approve') {
+              await adminService.approveCardApplication(id);
+              Alert.alert('Başarılı', 'Kart başvurusu onaylandı ve kart oluşturuldu.');
+          } else {
+              await adminService.rejectCardApplication(id);
+              Alert.alert('Başarılı', 'Kart başvurusu reddedildi.');
+          }
+          fetchData();
+      } catch (e) {
+          Alert.alert('Hata', e.message);
+      }
   };
 
   const handleStatusUpdate = async (id, status) => {
@@ -108,7 +126,14 @@ export default function AdminPanel({ onLogout }) {
             onPress={() => setActiveTab('applications')}
             style={styles.tab}
         >
-            Başvurular
+            Hesap Başvuruları
+        </Button>
+        <Button 
+            mode={activeTab === 'card_applications' ? 'contained' : 'text'} 
+            onPress={() => setActiveTab('card_applications')}
+            style={styles.tab}
+        >
+            Kart Başvuruları
         </Button>
         <Button 
             mode={activeTab === 'settings' ? 'contained' : 'text'} 
@@ -124,6 +149,27 @@ export default function AdminPanel({ onLogout }) {
       ) : activeTab === 'applications' ? (
         <ScrollView contentContainerStyle={styles.content}>
             {applications.map(renderApplicationItem)}
+        </ScrollView>
+      ) : activeTab === 'card_applications' ? (
+        <ScrollView contentContainerStyle={styles.content}>
+             {applications.map(app => (
+                 <Surface style={styles.card} key={app._id} elevation={1}>
+                  <List.Item
+                    title={`${app.kart_ismi}`}
+                    description={`TC: ${app.tc}\nLimit: ${app.limit_request} TL\nGelir: ${app.aylik_gelir} TL\nMeslek: ${app.calisma_durumu}`}
+                    descriptionNumberOfLines={4}
+                    left={props => <List.Icon {...props} icon="credit-card-plus" />}
+                    right={props => (
+                         <View style={styles.statusContainer}>
+                            <View style={{flexDirection: 'row', gap: 5}}>
+                                <Button mode="contained" compact buttonColor={colors.success} onPress={() => handleCardAction(app._id, 'approve')}>Onayla</Button>
+                                <Button mode="contained" compact buttonColor={colors.error} onPress={() => handleCardAction(app._id, 'reject')}>Reddet</Button>
+                            </View>
+                        </View>
+                    )}
+                  />
+                </Surface>
+             ))}
         </ScrollView>
       ) : (
         <ScrollView contentContainerStyle={styles.content}>

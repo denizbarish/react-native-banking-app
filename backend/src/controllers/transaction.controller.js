@@ -86,6 +86,27 @@ const createTransaction = async (req, res) => {
     await alici.save();
     await newTransaction.save();
 
+    // Push Notification Logic
+    if (alici.bildirim_izni && alici.expo_push_token) {
+        try {
+            const { Expo } = require('expo-server-sdk');
+            const expo = new Expo();
+
+            if (Expo.isExpoPushToken(alici.expo_push_token)) {
+                await expo.sendPushNotificationsAsync([{
+                    to: alici.expo_push_token,
+                    sound: 'default',
+                    title: 'Para Transferi',
+                    body: `Hesabınıza ${gonderici.ad} ${gonderici.soyad} tarafından ${miktar} TL gönderildi.`,
+                    data: { transactionId: newTransaction._id },
+                }]);
+                console.log('🔔 Push notification sent to:', alici.ad);
+            }
+        } catch (error) {
+            console.error('⚠️ Push notification failed:', error);
+        }
+    }
+
     res.status(201).json({ message: 'İşlem başarılı.', transaction: newTransaction });
 
   } catch (error) {

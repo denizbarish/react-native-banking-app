@@ -2,22 +2,16 @@ const express = require('express');
 const router = express.Router();
 const cardController = require('../controllers/card.controller.js');
 
-// POST /api/card/checklimit
-router.post('/checklimit', cardController.checklimit);
+// GET /api// Get user's cards
+router.get('/', cardController.getCards);
 
-// POST /api/card/checkskt
-router.post('/checkskt', cardController.checkskt);
+// Get user's card applications
+router.get('/applications', cardController.getCardApplications);
 
-//POST /api/card/checkinfo
-router.post('/checkinfo', cardController.checkinfo);
+// Apply for a card
+router.post('/apply', cardController.applyForCard);
 
-//POST /api/card/checkdou
-router.post('/checkdou', cardController.checkdou);
-
-//POST /api/card/getharcamalar
-router.get('/getharcamalar', cardController.getharcamalar);
-
-//POST /api/card/checkesktre
-router.post('/checkesktre', cardController.checkesktre);
+// Get card detail
+router.get('/:id', cardController.getCardDetail);
 
 module.exports = router;

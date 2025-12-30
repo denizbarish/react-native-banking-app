@@ -40,13 +40,14 @@ const accountRoutes = require('./routes/account.routes');
 const transactionRoutes = require('./routes/transaction.routes');
 const adminRoutes = require('./routes/admin.routes');
 const hashRoutes = require("./routes/hash.routes");
-
+const cardRoutes = require('./routes/card.routes');
 
 app.use('/api/auth', authRoutes);
 app.use('/api/accounts', accountRoutes);
 app.use('/api/hash', hashRoutes);
 app.use('/api/transactions', transactionRoutes);
 app.use('/api/admin', adminRoutes);
+app.use('/api/cards', cardRoutes);
 
 
 app.use((err, req, res, next) => {

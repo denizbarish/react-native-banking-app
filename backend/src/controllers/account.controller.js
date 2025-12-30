@@ -62,7 +62,8 @@ const register = async (req, res) => {
       calisma_durumu,
       calisma_sektoru,
       bakiye: 0,
-      iban: `TR${Math.floor(100000000000000000000000 + Math.random() * 900000000000000000000000)}`
+      // IBAN Format: DOU + 9 digits
+      iban: `DOU${Math.floor(100000000 + Math.random() * 900000000)}`
     });
 
     await newAccount.save();
@@ -84,7 +85,7 @@ const getAccounts = async (req, res) => {
 
 const getAccountByTC = async (req, res) => {
   try {
-    const account = await Account.findOne({ tc_kimlik: req.body.tc });
+    const account = await Account.findOne({ tc_kimlik: req.params.tc });
     if (!account) {
       return res.status(404).json({ message: 'Hesap bulunamadı' });
     }
@@ -96,9 +97,35 @@ const getAccountByTC = async (req, res) => {
 
 const updateAccount = async (req, res) => {
   try {
+    const updates = { ...req.body };
+
+    // If password is being updated, hash it first
+    if (updates.sifre) {
+        const PORT = process.env.PORT || 3000;
+        const fetchUrl = `http://127.0.0.1:${PORT}/api/hash/hash`;
+        
+        try {
+            const hashResponse = await fetch(fetchUrl, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ data: updates.sifre })
+            });
+
+            if (!hashResponse.ok) {
+                throw new Error('Şifreleme servisinde hata oluştu');
+            }
+
+            const hashData = await hashResponse.json();
+            updates.sifre = hashData.hashdata;
+        } catch (err) {
+            console.error('❌ Hash error in update:', err);
+            return res.status(500).json({ message: 'Şifre güncellenirken hata oluştu' });
+        }
+    }
+
     const account = await Account.findOneAndUpdate(
       { tc_kimlik: req.params.tc },
-      { $set: req.body },
+      { $set: updates },
       { new: true, runValidators: true }
     );
 

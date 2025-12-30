@@ -3,7 +3,7 @@ import axios from 'axios';
 
 
 
-const API_BASE_URL = 'http://172.20.10.3:3001/api';
+const API_BASE_URL = 'http://192.168.1.105:3001/api';
 
 console.log('🌐 API Base URL:', API_BASE_URL);
 
@@ -173,6 +173,17 @@ export const authService = {
     } catch (error) {
       throw new Error(
         error.response?.data?.message || 'Yüz doğrulaması başarısız'
+      );
+    }
+  },
+
+  updateProfile: async (tc, data) => {
+    try {
+      const response = await apiClient.put(`/accounts/${tc}`, data);
+      return response.data;
+    } catch (error) {
+      throw new Error(
+        error.response?.data?.message || 'Profil güncellenemedi'
       );
     }
   },

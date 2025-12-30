@@ -2,8 +2,8 @@ const mongoose = require('mongoose');
 
 const transactionSchema = new mongoose.Schema({
 dekont_url: { type: String, required: true, unique: true },
-alici_ıban: { type: String, required: true, match: /^TR[0-9]{24}$/ },
-gonderici_ıban: { type: String, required: true, match: /^TR[0-9]{24}$/ },
+alici_ıban: { type: String, required: true },
+gonderici_ıban: { type: String, required: true },
 gonderici_ad_soyad: { type: String, required: true },
 alici_ad_soyad: { type: String, required: true },
 miktar: { type: Number, required: true, min: 0.01 },

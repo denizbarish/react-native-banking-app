@@ -27,15 +27,9 @@ export default function Step2SmsVerification({ onNext, phoneNumber, onTimeout, c
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    
-    const sendSMS = async () => {
-      try {
-        await authService.sendSMS(phoneNumber);
-      } catch (err) {
-        console.error('SMS gönderme hatası:', err);
-      }
-    };
-    sendSMS();
+    // Mock SMS send - just log it
+    console.log('Mock SMS sent to:', phoneNumber);
+    // You could also set a timeout to simulate network delay if desired
   }, []);
 
   useEffect(() => {
@@ -85,33 +79,32 @@ export default function Step2SmsVerification({ onNext, phoneNumber, onTimeout, c
       return;
     }
 
-    setError('');
-    setLoading(true);
-
-    try {
-      
-      await authService.verifySMS(phoneNumber, code);
-      onNext({ smsCode: code, smsVerified: true });
-    } catch (err) {
-      setError(err.message || 'SMS doğrulama başarısız. Lütfen kodu kontrol edin.');
-    } finally {
-      setLoading(false);
+    // MOCK VERIFICATION
+    if (code === '123456') {
+        setError('');
+        setLoading(true);
+        // Simulate network delay
+        setTimeout(() => {
+            setLoading(false);
+            onNext({ smsCode: code, smsVerified: true });
+        }, 1000);
+        return;
+    } else {
+        setError('Hatalı kod! (Mock kod: 123456)');
+        return;
     }
   };
 
   const handleResend = async () => {
-    try {
-      setLoading(true);
-      await authService.sendSMS(phoneNumber);
-      setTimeLeft(180);
-      setCode('');
-      setError('');
-      Alert.alert('Başarılı', 'SMS kodu yeniden gönderildi.');
-    } catch (err) {
-      Alert.alert('Hata', err.message || 'SMS gönderilemedi.');
-    } finally {
-      setLoading(false);
-    }
+    setLoading(true);
+    // Simulate resend
+    setTimeout(() => {
+        setLoading(false);
+        setTimeLeft(180);
+        setCode('');
+        setError('');
+        Alert.alert('Başarılı', 'SMS kodu (Mock) yeniden gönderildi.');
+    }, 1000);
   };
 
   return (

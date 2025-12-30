@@ -28,12 +28,28 @@ export const adminService = {
     }
   },
 
-  updateSystemSettings: async (settings) => {
+  async updateSystemSettings(data) {
     try {
-      const response = await apiClient.put('/admin/settings', settings);
+      const response = await apiClient.put('/admin/settings', data);
       return response.data;
     } catch (error) {
       throw new Error(error.response?.data?.message || 'Ayarlar güncellenemedi');
     }
-  }
+  },
+
+    // --- Card Applications ---
+    async getCardApplications() {
+        const response = await apiClient.get('/admin/card-applications');
+        return response.data;
+    },
+
+    async approveCardApplication(id) {
+        const response = await apiClient.put(`/admin/card-applications/${id}/approve`);
+        return response.data;
+    },
+
+    async rejectCardApplication(id) {
+        const response = await apiClient.put(`/admin/card-applications/${id}/reject`);
+        return response.data;
+    }
 };

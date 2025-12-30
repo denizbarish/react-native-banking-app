@@ -20,7 +20,9 @@ const accountSchema = new mongoose.Schema({
   mevcut_kredi_tutari: {type : Number , default:0},
   mevcut_kredi_notu: { type: Number, default: 0 },
   smsCode: { type: String },
-  smsCodeExpires: { type: Date }
+  smsCodeExpires: { type: Date },
+  expo_push_token: { type: String },
+  bildirim_izni: { type: Boolean, default: true }
 }, {
 timestamps: true
 });

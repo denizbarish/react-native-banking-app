@@ -14,4 +14,9 @@ router.get('/settings', adminController.getSystemSettings);
 
 router.put('/settings', adminController.updateSystemSettings);
 
+// Card Applications
+router.get('/card-applications', adminController.getCardApplications);
+router.put('/card-applications/:id/approve', adminController.approveCardApplication);
+router.put('/card-applications/:id/reject', adminController.rejectCardApplication);
+
 module.exports = router;

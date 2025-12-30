@@ -68,9 +68,96 @@ const updateSystemSettings = async (req, res) => {
     }
 };
 
+const CardApplication = require('../models/CardApplication');
+const Card = require('../models/Card');
+
+// ... existing imports ...
+
+// ... existing functions ...
+
+const getCardApplications = async (req, res) => {
+    try {
+        const applications = await CardApplication.find({ status: 'Beklemede' }).sort({ createdAt: -1 });
+        res.status(200).json(applications);
+    } catch (e) {
+        res.status(500).json({ message: e.message });
+    }
+};
+
+const approveCardApplication = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const app = await CardApplication.findById(id);
+        
+        if (!app) return res.status(404).json({ message: 'Başvuru bulunamadı' });
+        if (app.status !== 'Beklemede') return res.status(400).json({ message: 'Başvuru zaten sonuçlanmış' });
+
+        // Create Real Card
+        // Generate random card details
+        const kart_num = '4' + Math.floor(Math.random() * 1000000000000000).toString().padStart(15, '0');
+        const cvv = Math.floor(Math.random() * 900 + 100).toString(); 
+        
+        const today = new Date();
+        const expiryYear = today.getFullYear() + 3;
+        const expiryMonth = (today.getMonth() + 1).toString().padStart(2, '0');
+        const skt = `${expiryMonth}/${expiryYear.toString().slice(-2)}`;
+
+        const ekstre_kesim = new Date();
+        ekstre_kesim.setDate(1); 
+        const son_odeme = new Date();
+        son_odeme.setDate(10); 
+
+        const newCard = new Card({
+            tc: app.tc,
+            kart_num,
+            cvv,
+            skt,
+            kart_ismi: app.kart_ismi,
+            toplam_limit: app.limit_request,
+            kullanilabilir_limit: app.limit_request,
+            donem_ici_harcama: 0,
+            dou_para: 0,
+            ekstre_kesim_tarihi: ekstre_kesim,
+            son_odeme_tarihi: son_odeme,
+            sonraki_ekstre_kesim_tarihi: new Date(new Date().setMonth(new Date().getMonth() + 1)),
+            sonraki_son_odeme_tarihi: new Date(new Date().setMonth(new Date().getMonth() + 1)),
+            harcamalar: []
+        });
+
+        await newCard.save();
+
+        app.status = 'Onaylandı';
+        await app.save();
+
+        res.status(200).json({ message: 'Başvuru onaylandı ve kart oluşturuldu.', card: newCard });
+
+    } catch (e) {
+        res.status(500).json({ message: e.message });
+    }
+};
+
+const rejectCardApplication = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const app = await CardApplication.findById(id);
+        
+        if (!app) return res.status(404).json({ message: 'Başvuru bulunamadı' });
+        
+        app.status = 'Reddedildi';
+        await app.save();
+        
+        res.status(200).json({ message: 'Başvuru reddedildi.' });
+    } catch (e) {
+        res.status(500).json({ message: e.message });
+    }
+};
+
 module.exports = {
   getApplications,
   updateApplicationStatus,
   getSystemSettings,
-  updateSystemSettings
+  updateSystemSettings,
+  getCardApplications,
+  approveCardApplication,
+  rejectCardApplication
 };

@@ -56,11 +56,7 @@ const login = async (req, res) => {
     res.status(200).json({ 
         message: 'Giriş başarılı', 
         token,
-        user: {
-            ad: hesap.ad,
-            soyad: hesap.soyad,
-            tcNo: hesap.tc_kimlik
-        }
+        user: hesap
     }); 
   } catch (err) {
     console.error('Login error:', err);
@@ -80,13 +76,8 @@ const logout = async (req, res) => {
 const verifyFace = async (req, res) => {
  
 };
-const { Vonage } = require('@vonage/server-sdk')
-
-const vonage = new Vonage({
-  apiKey: "6ffead53",
-  apiSecret: "jB1EpZMF1SoNFmeS" 
-})
-const from = "DOU BANK"
+// const { Vonage } = require('@vonage/server-sdk')
+// Mock SMS for development
 const sendSMS = async (req, res) => {
     try {
         const { phone } = req.body;
@@ -98,15 +89,16 @@ const sendSMS = async (req, res) => {
         }
 
         const code = Math.floor(100000 + Math.random() * 900000);
-        const to = "90" + phone.substring(1); // 0 ile başlıyorsa vonage için 90 ekleyelim
-        const text = `Doğuş Üniversitesi Bankası için doğrulama kodu: ${code}`;
+        // const to = "90" + phone.substring(1); // 0 ile başlıyorsa vonage için 90 ekleyelim
+        // const text = `Doğuş Üniversitesi Bankası için doğrulama kodu: ${code}`;
         
         // Kodu ve geçerlilik süresini (3 dakika) kaydet
         user.smsCode = code.toString();
         user.smsCodeExpires = Date.now() + 3 * 60 * 1000; // 3 dakika
         await user.save();
 
-        await vonage.sms.send({to, from, text});
+        // await vonage.sms.send({to, from, text});
+        console.log(`📨 MOCK SMS Gönderildi -> Telefon: ${phone}, Kod: ${code}`);
         
         res.status(200).json({ message: "SMS gönderildi" });
     } catch (err) {

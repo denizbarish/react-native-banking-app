@@ -87,6 +87,9 @@ export default function ApplicationFlow({ onComplete }) {
         hearingImpaired: finalData.hearingImpaired,
         
         
+        name: finalData.name,
+        surname: finalData.surname,
+        
         applicationDate: new Date().toISOString(),
       });
       
